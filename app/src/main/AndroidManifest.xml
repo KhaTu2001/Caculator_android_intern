@@ -14,7 +14,7 @@
         android:theme="@style/Theme.Caculator_android_intern"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name="code.with.cal.kotlincalculatorapp.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
