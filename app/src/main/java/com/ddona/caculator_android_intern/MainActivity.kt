@@ -7,11 +7,13 @@ import android.widget.Button
 import com.ddona.caculator_android_intern.R
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : AppCompatActivity()
 {
     private var canAddOperation = false
     private var canAddDecimal = true
     private var checkdot = true
+
 
 
 
@@ -22,6 +24,9 @@ class MainActivity : AppCompatActivity()
 
     }
 
+    fun screen_rotation(view: View){
+
+    }
 
     fun numberAction(view: View)
     {
@@ -77,13 +82,13 @@ class MainActivity : AppCompatActivity()
 
     private fun calculateResults(): String
     {
-        val digitsOperators = digitsOperators()
-        if(digitsOperators.isEmpty()) return ""
+        val Operators = Operators()
+        if(Operators.isEmpty()) return ""
 
-        val timesDivision = timesDivisionCalculate(digitsOperators)
-        if(timesDivision.isEmpty()) return ""
+        val Division = DivisionCalculate(Operators)
+        if(Division.isEmpty()) return ""
 
-        val result = addSubtractCalculate(timesDivision)
+        val result = addSubtractCalculate(Division)
         return result.toString()
     }
 
@@ -101,23 +106,24 @@ class MainActivity : AppCompatActivity()
                     result += nextDigit
                 if (operator == '-')
                     result -= nextDigit
+
             }
         }
 
         return result
     }
 
-    private fun timesDivisionCalculate(passedList: MutableList<Any>): MutableList<Any>
+    private fun DivisionCalculate(passedList: MutableList<Any>): MutableList<Any>
     {
         var list = passedList
-        while (list.contains('x') || list.contains('/'))
+        while (list.contains('x') || list.contains('/') || list.contains('%') )
         {
-            list = calcTimesDiv(list)
+            list = calcDiv(list)
         }
         return list
     }
 
-    private fun calcTimesDiv(passedList: MutableList<Any>): MutableList<Any>
+    private fun calcDiv(passedList: MutableList<Any>): MutableList<Any>
     {
         val newList = mutableListOf<Any>()
         var restartIndex = passedList.size
@@ -129,6 +135,8 @@ class MainActivity : AppCompatActivity()
                 val operator = passedList[i]
                 val prevDigit = passedList[i - 1] as Float
                 val nextDigit = passedList[i + 1] as Float
+
+
                 when(operator)
                 {
                     'x' ->
@@ -141,6 +149,14 @@ class MainActivity : AppCompatActivity()
                         newList.add(prevDigit / nextDigit)
                         restartIndex = i + 1
                     }
+                    '%' ->
+                    {
+                        newList.add(prevDigit / 100)
+                        restartIndex = i + 1
+
+                    }
+
+
                     else ->
                     {
                         newList.add(prevDigit)
@@ -156,13 +172,13 @@ class MainActivity : AppCompatActivity()
         return newList
     }
 
-    private fun digitsOperators(): MutableList<Any>
+    private fun Operators(): MutableList<Any>
     {
         val list = mutableListOf<Any>()
         var currentDigit = ""
         for(character in workingsTV.text)
         {
-            if(character.isDigit() || character == '.')
+            if(character.isDigit() || character == '.' )
                 currentDigit += character
             else
             {
